@@ -17,6 +17,7 @@ namespace PracticaFinalV2
     public partial class MainWindow : Window
     {
         private LogicaRestaurante Logica;
+        private Mesa mesaSeleccionada = null;
         private Grid gridSeleccionado = null;
 
         public MainWindow()
@@ -50,9 +51,7 @@ namespace PracticaFinalV2
 
             // --- Texto de la mesa ---
             TextBlock texto = new TextBlock();
-            texto.Text = $"Mesa {mesa.Id}\n" +
-                         $"Capacidad: {mesa.CapacidadMaxima}\n" +
-                         $"Comensales: {mesa.ComensalesActuales}";
+            texto.Text = GenerarTextoMesa(mesa);
             texto.FontSize = 11;
             texto.FontWeight = FontWeights.Bold;
             texto.TextAlignment = TextAlignment.Center;
@@ -64,6 +63,7 @@ namespace PracticaFinalV2
             contenedor.Tag = mesa;
 
             contenedor.MouseLeftButtonDown += ContenedorMesa_Click;
+            mesa.MesaActualizada += OnMesaActualizada;
 
             lienzoSala.Children.Add(contenedor);
         }
@@ -88,6 +88,37 @@ namespace PracticaFinalV2
 
         }
 
+        private void ActualizarPanelDerecho(Mesa mesa)
+        {
+            if (mesa != null)
+            {
+                txtInfoMesa.Text = $"Mesa {mesaSeleccionada.Id}";
+                txtComensales.Text = $"{mesaSeleccionada.ComensalesActuales}";
+
+                // --- Habilitar botones segun estado ---
+                btnReservar.IsEnabled = mesaSeleccionada.Estado == EstadoMesa.Libre;
+                btnOcupar.IsEnabled = mesaSeleccionada.Estado == EstadoMesa.Libre || mesaSeleccionada.Estado == EstadoMesa.Reservada;
+                btnLiberar.IsEnabled = mesaSeleccionada.Estado == EstadoMesa.Ocupada || mesaSeleccionada.Estado == EstadoMesa.OcupadaComanda || mesaSeleccionada.Estado == EstadoMesa.Reservada;
+                btnGestionarComanda.IsEnabled = mesaSeleccionada.Estado == EstadoMesa.Ocupada || mesaSeleccionada.Estado == EstadoMesa.OcupadaComanda;
+
+            }
+            else
+            {
+                txtInfoMesa.Text = "-";
+                txtComensales.Text = "0";
+                btnReservar.IsEnabled = false;
+                btnOcupar.IsEnabled = false;
+                btnLiberar.IsEnabled = false;
+                btnGestionarComanda.IsEnabled = false;
+            }
+        }
+
+        private static String GenerarTextoMesa(Mesa mesa)
+        {
+            return $"Mesa {mesa.Id}\n" +
+                   $"Capacidad: {mesa.CapacidadMaxima}\n" +
+                   $"Comensales: {mesa.ComensalesActuales}";
+        }
 
         // --- EVENTOS COMUNICACION ---
         private void Logica_MesaAnadida(object sender, MesaEventArgs e)
@@ -97,8 +128,7 @@ namespace PracticaFinalV2
         }
         private void Logica_SeleccionCambiada(object sender, MesaEventArgs e)
         {
-            // Aquí se puede actualizar la interfaz según la mesa seleccionada
-            Mesa mesaSeleccionada = e.MesaNueva;
+            mesaSeleccionada = e.MesaNueva;
 
             if (gridSeleccionado != null)
             {
@@ -121,6 +151,30 @@ namespace PracticaFinalV2
                 mesaNueva.Stroke = Brushes.DarkRed;
                 mesaNueva.StrokeThickness = 3;
             }
+
+            ActualizarPanelDerecho(mesaSeleccionada);
+        }
+
+        private void OnMesaActualizada(object sender, EventArgs e)
+        {
+            Mesa mesaCambio = (Mesa)sender;
+
+            Grid? grid = null;
+            foreach(var hijo in lienzoSala.Children)
+            {
+                if (hijo is Grid g && g.Tag == mesaCambio)
+                {
+                    grid = g;
+                    break;
+                }
+            }
+
+            if (grid != null)
+            {
+                if (grid.Children[0] is Shape figura) ActualizarColorFigura(figura, mesaCambio);
+                if (grid.Children[1] is TextBlock texto) texto.Text = GenerarTextoMesa(mesaCambio);
+                if (Logica.MesaSeleccionada == mesaCambio) ActualizarPanelDerecho(mesaCambio);
+            }
         }
 
         // --- EVENTOS INTERFAZ ---
@@ -137,6 +191,51 @@ namespace PracticaFinalV2
             }
         }
 
+        private void btnReservar_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!int.TryParse(txtComensales.Text, out int comensales))
+                {
+                    MessageBox.Show("No se ha introducido un numero de comensales.", "Error de Datos", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                Logica.MesaSeleccionada.Reservar(comensales);
+            } catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error de Datos", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void btnOcupar_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!int.TryParse(txtComensales.Text, out int comensales))
+                {
+                    MessageBox.Show("No se ha introducido un numero de comensales.", "Error de Datos", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                Logica.MesaSeleccionada.Ocupar(comensales);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error de Datos", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        
+
+        private void btnLiberar_Click(object sender, RoutedEventArgs e)
+        {
+            Logica.MesaSeleccionada.Liberar();
+        }
+
+        private void btnGestionarComanda_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             TabControl tab = (TabControl)sender;

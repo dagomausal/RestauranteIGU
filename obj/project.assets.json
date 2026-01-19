@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\dagom\\source\\repos\\PracticaFinalV2\\PracticaFinalV2.csproj",
+      "projectUniqueName": "C:\\Users\\dagom\\Documents\\Carrera\\3º CURSO\\1º Cuatri\\IGU\\RestauranteIGU\\PracticaFinalV2.csproj",
       "projectName": "PracticaFinalV2",
-      "projectPath": "C:\\Users\\dagom\\source\\repos\\PracticaFinalV2\\PracticaFinalV2.csproj",
+      "projectPath": "C:\\Users\\dagom\\Documents\\Carrera\\3º CURSO\\1º Cuatri\\IGU\\RestauranteIGU\\PracticaFinalV2.csproj",
       "packagesPath": "C:\\Users\\dagom\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\dagom\\source\\repos\\PracticaFinalV2\\obj\\",
+      "outputPath": "C:\\Users\\dagom\\Documents\\Carrera\\3º CURSO\\1º Cuatri\\IGU\\RestauranteIGU\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

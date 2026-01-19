@@ -12,6 +12,7 @@ namespace PracticaFinalV2.Modelos
 {
     public class Mesa
     {
+        public event EventHandler MesaActualizada;
         public int Id { get; set; }
         public int CapacidadMaxima { get; set; }
         public int ComensalesActuales { get; set; }
@@ -50,18 +51,22 @@ namespace PracticaFinalV2.Modelos
 
         public void Reservar(int comensales)
         {
-            if (Estado != EstadoMesa.Libre) throw new Exception("La mesa no está libre para reservar.");
             if (comensales > CapacidadMaxima) throw new Exception("El número de comensales excede la capacidad máxima de la mesa.");
+            if (comensales <= 0) throw new Exception("El número de comensales debe ser mayor que cero.");
             ComensalesActuales = comensales;
             Estado = EstadoMesa.Reservada;
+
+            MesaActualizada?.Invoke(this, EventArgs.Empty);
         }
 
         public void Ocupar(int comensales)
         {
-            if (Estado == EstadoMesa.Ocupada || Estado == EstadoMesa.OcupadaComanda) throw new Exception("La mesa ya está ocupada.");
             if (comensales > CapacidadMaxima) throw new Exception("El número de comensales excede la capacidad máxima de la mesa.");
+            if (comensales <= 0) throw new Exception("El número de comensales debe ser mayor que cero.");
             ComensalesActuales = comensales;
             Estado = EstadoMesa.Ocupada;
+
+            MesaActualizada?.Invoke(this, EventArgs.Empty);
         }
 
         public void Liberar()
@@ -69,6 +74,8 @@ namespace PracticaFinalV2.Modelos
             Comanda.Clear();
             ComensalesActuales = 0;
             Estado = EstadoMesa.Libre;
+
+            MesaActualizada?.Invoke(this, EventArgs.Empty);
         }
 
         public void AgregarPlatoComanda(Plato plato)
@@ -95,6 +102,8 @@ namespace PracticaFinalV2.Modelos
             {
                 Estado = EstadoMesa.OcupadaComanda;
             }
+
+            MesaActualizada?.Invoke(this, EventArgs.Empty);
         }
     }
 }
