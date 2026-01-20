@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
@@ -10,13 +11,41 @@ using System.Windows.Shapes;
 
 namespace PracticaFinalV2.Modelos
 {
-    public class Mesa
+    public class Mesa : INotifyPropertyChanged
     {
+        private int comensalesRespaldo;
+        private EstadoMesa estadoRespaldo;
+
         public event EventHandler MesaActualizada;
+        public event PropertyChangedEventHandler PropertyChanged;
         public int Id { get; set; }
         public int CapacidadMaxima { get; set; }
-        public int ComensalesActuales { get; set; }
-        public EstadoMesa Estado { get; set; }
+        public int ComensalesActuales 
+        { 
+            get { return comensalesRespaldo; }
+            set
+            {
+                if (ComensalesActuales != value)
+                {
+                    comensalesRespaldo = value;
+                    OnPropertyChanged("ComensalesActuales");
+                    MesaActualizada?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+        public EstadoMesa Estado 
+        { 
+            get { return estadoRespaldo; }
+            set
+            {
+                if(estadoRespaldo != value)
+                {
+                    estadoRespaldo = value;
+                    OnPropertyChanged("Estado");
+                    MesaActualizada?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
         public TipoMesa Forma { get; set; }
         public double X { get; set; }
         public double Y { get; set; }
@@ -55,8 +84,6 @@ namespace PracticaFinalV2.Modelos
             if (comensales <= 0) throw new Exception("El número de comensales debe ser mayor que cero.");
             ComensalesActuales = comensales;
             Estado = EstadoMesa.Reservada;
-
-            MesaActualizada?.Invoke(this, EventArgs.Empty);
         }
 
         public void Ocupar(int comensales)
@@ -65,8 +92,6 @@ namespace PracticaFinalV2.Modelos
             if (comensales <= 0) throw new Exception("El número de comensales debe ser mayor que cero.");
             ComensalesActuales = comensales;
             Estado = EstadoMesa.Ocupada;
-
-            MesaActualizada?.Invoke(this, EventArgs.Empty);
         }
 
         public void Liberar()
@@ -74,8 +99,24 @@ namespace PracticaFinalV2.Modelos
             Comanda.Clear();
             ComensalesActuales = 0;
             Estado = EstadoMesa.Libre;
+        }
 
-            MesaActualizada?.Invoke(this, EventArgs.Empty);
+        private void ActualizarEstadoComanda()
+        {
+            if (this.Comanda.Count > 0)
+            {
+                if (Estado == EstadoMesa.Ocupada)
+                {
+                    Estado = EstadoMesa.OcupadaComanda;
+                }
+            }
+            else
+            {
+                if (Estado == EstadoMesa.OcupadaComanda)
+                {
+                    Estado = EstadoMesa.Ocupada;
+                }
+            }
         }
 
         public void AgregarPlatoComanda(Plato plato)
@@ -98,12 +139,7 @@ namespace PracticaFinalV2.Modelos
                 Comanda.Add(platoComanda);
             }
 
-            if (Estado == EstadoMesa.Ocupada)
-            {
-                Estado = EstadoMesa.OcupadaComanda;
-            }
-
-            MesaActualizada?.Invoke(this, EventArgs.Empty);
+            ActualizarEstadoComanda();
         }
 
         public void ConfirmarComanda(ObservableCollection<PlatoComanda> comandaConfirmada)
@@ -115,16 +151,12 @@ namespace PracticaFinalV2.Modelos
                 this.Comanda.Add(pc);
             }
 
-            if (this.Comanda.Count > 0)
-            {
-                Estado = EstadoMesa.OcupadaComanda;
+            ActualizarEstadoComanda();
+        }
 
-            } else
-            {
-                Estado = EstadoMesa.Ocupada;
-            }
-
-            MesaActualizada?.Invoke(this, EventArgs.Empty);
+        protected void OnPropertyChanged(string nombrePropiedad)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nombrePropiedad));
         }
     }
 }

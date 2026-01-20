@@ -20,7 +20,7 @@ namespace PracticaFinalV2.Ventanas
 
             foreach (PlatoComanda pc in mesaActual.Comanda)
             {
-                ComandaTemporal.Add(pc);
+                ComandaTemporal.Add(new PlatoComanda(pc));
             }
 
             lvComandaActual.ItemsSource = ComandaTemporal;
@@ -49,6 +49,11 @@ namespace PracticaFinalV2.Ventanas
             if (lvComandaActual.SelectedItem != null)
             {
                 PlatoComanda platoSeleccionado = (PlatoComanda)lvComandaActual.SelectedItem;
+                if (platoSeleccionado.Cantidad > 1)
+                {
+                    platoSeleccionado.Cantidad--;
+                    return;
+                }
                 ComandaTemporal.Remove(platoSeleccionado);
             }
 

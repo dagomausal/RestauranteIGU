@@ -94,6 +94,10 @@ namespace PracticaFinalV2
             {
                 VentanaComanda ventanaComanda = new VentanaComanda(Logica.MesaSeleccionada, Logica.MenuDelDia);
                 ventanaComanda.ShowDialog();
+            } else
+            {
+                MessageBox.Show("Primero debes Ocupar la mesa para gestionar su comanda.", "Acción no permitida", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
         }
 

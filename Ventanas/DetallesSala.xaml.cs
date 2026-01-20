@@ -27,6 +27,7 @@ namespace PracticaFinalV2.Ventanas
             this.Logica = logicaConstructor;
             lvMesas.ItemsSource = Logica.ListaMesas;
             Logica.SeleccionCambiada += Logica_SeleccionCambiada;
+            this.Closed += OnClosed;
 
             // --- Seleccionar la primera mesa al abrir la ventana ---
             if (Logica.MesaSeleccionada != null)
@@ -60,7 +61,24 @@ namespace PracticaFinalV2.Ventanas
 
         private void lvMesas_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show("Doble clic en la mesa: " + ((Mesa)lvMesas.SelectedItem).Id);
+            if (lvMesas.SelectedItem!= null)
+            {
+                Mesa mesaSeleccionada = (Mesa)lvMesas.SelectedItem;
+
+                if (mesaSeleccionada.Estado == EstadoMesa.Libre || mesaSeleccionada.Estado == EstadoMesa.Reservada)
+                {
+                    MessageBox.Show("Primero debes Ocupar la mesa para gestionar su comanda.", "Acción no permitida", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                VentanaComanda ventanaComanda = new VentanaComanda(mesaSeleccionada, Logica.MenuDelDia);
+                ventanaComanda.ShowDialog();
+            }
+        }
+
+        private void OnClosed(object sender, EventArgs e)
+        {
+            Logica.SeleccionCambiada -= Logica_SeleccionCambiada;
         }
     }
 }
