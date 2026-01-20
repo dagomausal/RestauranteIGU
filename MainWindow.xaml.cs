@@ -28,7 +28,7 @@ namespace PracticaFinalV2
             // --- Eventos ---
             Logica.MesaAnadida += Logica_MesaAnadida;
             Logica.SeleccionCambiada += Logica_SeleccionCambiada;
-            
+
             Logica.CargarDatosIniciales();
         }
 
@@ -78,7 +78,7 @@ namespace PracticaFinalV2
                 case EstadoMesa.OcupadaComanda: figura.Fill = Brushes.Red; break;
             }
         }
-       
+
         private void AbrirVentanaDetalles()
         {
             DetallesMesas ventanaDetalles = new DetallesMesas(Logica);
@@ -86,6 +86,15 @@ namespace PracticaFinalV2
             if (ventanaDetalles == null || !ventanaDetalles.IsLoaded) ventanaDetalles.Show();
             else ventanaDetalles.Activate();
 
+        }
+
+        private void AbrirVentanaComanda()
+        {
+            if (Logica.MesaSeleccionada.Estado != EstadoMesa.Libre && Logica.MesaSeleccionada.Estado != EstadoMesa.Reservada)
+            {
+                VentanaComanda ventanaComanda = new VentanaComanda(Logica.MesaSeleccionada, Logica.MenuDelDia);
+                ventanaComanda.ShowDialog();
+            }
         }
 
         private void ActualizarPanelDerecho(Mesa mesa)
@@ -136,7 +145,7 @@ namespace PracticaFinalV2
                 mesaAntigua.Stroke = null;
             }
 
-            foreach(var hijo in lienzoSala.Children)
+            foreach (var hijo in lienzoSala.Children)
             {
                 if (hijo is Grid g && g.Tag == mesaSeleccionada)
                 {
@@ -160,7 +169,7 @@ namespace PracticaFinalV2
             Mesa mesaCambio = (Mesa)sender;
 
             Grid? grid = null;
-            foreach(var hijo in lienzoSala.Children)
+            foreach (var hijo in lienzoSala.Children)
             {
                 if (hijo is Grid g && g.Tag == mesaCambio)
                 {
@@ -187,7 +196,7 @@ namespace PracticaFinalV2
 
             if (e.ClickCount == 2)
             {
-                // AbrirVentanaComanda(mesaClicada);
+                AbrirVentanaComanda();
             }
         }
 
@@ -202,7 +211,8 @@ namespace PracticaFinalV2
                 }
 
                 Logica.MesaSeleccionada.Reservar(comensales);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error de Datos", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -225,7 +235,7 @@ namespace PracticaFinalV2
                 MessageBox.Show(ex.Message, "Error de Datos", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        
+
 
         private void btnLiberar_Click(object sender, RoutedEventArgs e)
         {
@@ -234,7 +244,7 @@ namespace PracticaFinalV2
 
         private void btnGestionarComanda_Click(object sender, RoutedEventArgs e)
         {
-
+            AbrirVentanaComanda();
         }
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -245,10 +255,9 @@ namespace PracticaFinalV2
             else if (item.Header.ToString() == "Estadística Mesa") /*DibujarGraficoMesa()*/;
         }
 
-        private void DetallesSala_Click(object sender, RoutedEventArgs e )
+        private void DetallesSala_Click(object sender, RoutedEventArgs e)
         {
             AbrirVentanaDetalles();
         }
-       
     }
 }

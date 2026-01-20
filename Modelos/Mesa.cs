@@ -80,7 +80,7 @@ namespace PracticaFinalV2.Modelos
 
         public void AgregarPlatoComanda(Plato plato)
         {
-            // Posible validaciones antes de agregar el plato
+            
             PlatoComanda platoComanda = null;
             foreach(PlatoComanda pc in Comanda)
             {
@@ -101,6 +101,27 @@ namespace PracticaFinalV2.Modelos
             if (Estado == EstadoMesa.Ocupada)
             {
                 Estado = EstadoMesa.OcupadaComanda;
+            }
+
+            MesaActualizada?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void ConfirmarComanda(ObservableCollection<PlatoComanda> comandaConfirmada)
+        {
+            this.Comanda.Clear();
+
+            foreach (PlatoComanda pc in comandaConfirmada)
+            {
+                this.Comanda.Add(pc);
+            }
+
+            if (this.Comanda.Count > 0)
+            {
+                Estado = EstadoMesa.OcupadaComanda;
+
+            } else
+            {
+                Estado = EstadoMesa.Ocupada;
             }
 
             MesaActualizada?.Invoke(this, EventArgs.Empty);
