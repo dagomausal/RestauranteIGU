@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PracticaFinalV2.Ventanas"
         mc:Ignorable="d"
-        Title="GestionMesas" Height="450" Width="800">
+        Title="Gestión de las Mesas" Height="450" Width="800">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>

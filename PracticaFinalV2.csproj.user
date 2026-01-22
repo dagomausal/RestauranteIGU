@@ -8,6 +8,9 @@
     <Compile Update="Ventanas\GestionMesas.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Ventanas\GestionPlatos.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Ventanas\VentanaComanda.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

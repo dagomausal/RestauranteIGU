@@ -108,6 +108,12 @@ namespace PracticaFinalV2.Ventanas
             ventanaGestion.ShowDialog();
         }
 
+        private void AbrirVentanaGestionPlatos()
+        {
+            GestionPlatos ventanaGestion = new GestionPlatos(Logica);
+            ventanaGestion.ShowDialog();
+        }
+
         private void ActualizarPanelDerecho(Mesa mesa)
         {
             if (mesa != null)
@@ -437,6 +443,11 @@ namespace PracticaFinalV2.Ventanas
         private void GestionarMesas_Click(object sender, RoutedEventArgs e)
         {
             AbrirVentanaGestionMesas();
+        }
+
+        private void GestionarPlatos_Click(object sender, RoutedEventArgs e)
+        {
+            AbrirVentanaGestionPlatos();
         }
     }
 }

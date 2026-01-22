@@ -19,7 +19,7 @@ namespace PracticaFinalV2.Ventanas
 {
     public partial class GestionMesas : Window
     {
-        LogicaRestaurante Logica;
+        private LogicaRestaurante Logica;
         private ObservableCollection<Mesa> ListaMesasTemporal;
         private List<Mesa> ListaMesasABorrar;
         public GestionMesas(LogicaRestaurante logicaConstructor)

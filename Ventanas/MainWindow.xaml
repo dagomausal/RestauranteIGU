@@ -10,7 +10,7 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Archivo">
                 <MenuItem Header="Nueva Sesión (Reiniciar)"/>
-                <MenuItem Header="Gestionar Carta"/>
+                <MenuItem Header="Gestionar Carta" Click="GestionarPlatos_Click"/>
                 <MenuItem Header="Salir" />
             </MenuItem>
 

@@ -100,34 +100,12 @@ namespace PracticaFinalV2.Logica
             OnMesaEliminada(mesaAEliminar);
         }
 
-        private void OnMesaAnadida(Mesa mesa)
-        {
-            MesaAnadida?.Invoke(this, new MesaEventArgs(mesa));
-        }
-
-        private void OnMesaEliminada(Mesa mesa)
-        {
-            MesaEliminada?.Invoke(this, new MesaEventArgs(mesa));
-        }
-
-        public void SeleccionarMesa(Mesa mesa)
-        {
-            if (MesaSeleccionada != mesa)
-            {
-                MesaSeleccionada = mesa;
-                OnSeleccionCambiada(mesa);
-            }
-        }
-        private void OnSeleccionCambiada(Mesa mesa)
-        {
-            SeleccionCambiada?.Invoke(this, new MesaEventArgs(mesa));
-        }
 
         public int CalcularTotalPlatos(Mesa mesa)
         {
             int total = 0;
 
-            foreach(PlatoComanda pc in mesa.Comanda)
+            foreach (PlatoComanda pc in mesa.Comanda)
             {
                 total += pc.Cantidad;
             }
@@ -153,7 +131,7 @@ namespace PracticaFinalV2.Logica
         public int ObtenerSiguienteIdDisponible(ObservableCollection<Mesa> listaBuscar)
         {
             int id = 1;
-            
+
             while (true)
             {
                 bool idOcupado = false;
@@ -173,6 +151,44 @@ namespace PracticaFinalV2.Logica
 
                 id++;
             }
+        }
+
+        public void AnadirPlato(Plato nuevoPlato)
+        {
+            MenuDelDia.Add(nuevoPlato);
+        }
+
+        public Plato CrearPlato(string nombre, CategoriaPlato categoria, string descripcion)
+        {
+            return new Plato(nombre, categoria, descripcion);
+        }
+
+        public void EliminarPlato(Plato platoAEliminar)
+        {
+            MenuDelDia.Remove(platoAEliminar);
+        }
+
+        private void OnMesaAnadida(Mesa mesa)
+        {
+            MesaAnadida?.Invoke(this, new MesaEventArgs(mesa));
+        }
+
+        private void OnMesaEliminada(Mesa mesa)
+        {
+            MesaEliminada?.Invoke(this, new MesaEventArgs(mesa));
+        }
+
+        public void SeleccionarMesa(Mesa mesa)
+        {
+            if (MesaSeleccionada != mesa)
+            {
+                MesaSeleccionada = mesa;
+                OnSeleccionCambiada(mesa);
+            }
+        }
+        private void OnSeleccionCambiada(Mesa mesa)
+        {
+            SeleccionCambiada?.Invoke(this, new MesaEventArgs(mesa));
         }
     }
 

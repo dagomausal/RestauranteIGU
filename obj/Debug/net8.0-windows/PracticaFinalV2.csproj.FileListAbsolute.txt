@@ -47,3 +47,5 @@ C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Deb
 C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\PracticaFinalV2.pdb
 C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\PracticaFinalV2.genruntimeconfig.cache
 C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\ref\PracticaFinalV2.dll
+C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\Ventanas\GestionPlatos.g.cs
+C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\Ventanas\GestionPlatos.baml

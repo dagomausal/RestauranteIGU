@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PracticaFinalV2.Ventanas"
         mc:Ignorable="d"
-        Title="Gestionar Comanda" Height="400" Width="600">
+        Title="Gestión de la Comanda" Height="400" Width="600">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
