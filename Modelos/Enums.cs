@@ -23,7 +23,7 @@ namespace PracticaFinalV2.Modelos
 
     public enum TipoMesa
     {
-        Cuadrada,
+        Rectangular,
         Circular
     }
 }

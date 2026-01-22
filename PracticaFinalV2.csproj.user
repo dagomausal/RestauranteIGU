@@ -5,6 +5,9 @@
     <Compile Update="Ventanas\DetallesSala.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Ventanas\GestionMesas.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Ventanas\VentanaComanda.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

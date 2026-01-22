@@ -20,18 +20,22 @@ C:\Users\dagom\source\repos\PracticaFinalV2\obj\Debug\net8.0-windows\PracticaFin
 C:\Users\dagom\source\repos\PracticaFinalV2\obj\Debug\net8.0-windows\ref\PracticaFinalV2.dll
 C:\Users\dagom\source\repos\PracticaFinalV2\obj\Debug\net8.0-windows\Ventanas\DetallesSala.g.cs
 C:\Users\dagom\source\repos\PracticaFinalV2\obj\Debug\net8.0-windows\Ventanas\DetallesSala.baml
+C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\Ventanas\DetallesSala.g.cs
+C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\Ventanas\GestionMesas.g.cs
+C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\Ventanas\MainWindow.g.cs
+C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\Ventanas\VentanaComanda.g.cs
+C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\App.g.cs
+C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\PracticaFinalV2_MarkupCompile.cache
+C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\PracticaFinalV2_MarkupCompile.lref
 C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\bin\Debug\net8.0-windows\PracticaFinalV2.exe
 C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\bin\Debug\net8.0-windows\PracticaFinalV2.deps.json
 C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\bin\Debug\net8.0-windows\PracticaFinalV2.runtimeconfig.json
 C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\bin\Debug\net8.0-windows\PracticaFinalV2.dll
 C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\bin\Debug\net8.0-windows\PracticaFinalV2.pdb
-C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\MainWindow.g.cs
-C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\Ventanas\DetallesSala.g.cs
-C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\App.g.cs
-C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\PracticaFinalV2_MarkupCompile.cache
-C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\PracticaFinalV2_MarkupCompile.lref
-C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\MainWindow.baml
 C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\Ventanas\DetallesSala.baml
+C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\Ventanas\GestionMesas.baml
+C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\Ventanas\MainWindow.baml
+C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\Ventanas\VentanaComanda.baml
 C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\PracticaFinalV2.g.resources
 C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\PracticaFinalV2.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\PracticaFinalV2.AssemblyInfoInputs.cache
@@ -43,5 +47,3 @@ C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Deb
 C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\PracticaFinalV2.pdb
 C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\PracticaFinalV2.genruntimeconfig.cache
 C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\ref\PracticaFinalV2.dll
-C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\Ventanas\VentanaComanda.g.cs
-C:\Users\dagom\Documents\Carrera\3º CURSO\1º Cuatri\IGU\RestauranteIGU\obj\Debug\net8.0-windows\Ventanas\VentanaComanda.baml

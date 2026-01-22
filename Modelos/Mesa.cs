@@ -29,7 +29,7 @@ namespace PracticaFinalV2.Modelos
                 {
                     comensalesRespaldo = value;
                     OnPropertyChanged("ComensalesActuales");
-                    MesaActualizada?.Invoke(this, EventArgs.Empty);
+                    OnMesaActualizada();
                 }
             }
         }
@@ -42,7 +42,7 @@ namespace PracticaFinalV2.Modelos
                 {
                     estadoRespaldo = value;
                     OnPropertyChanged("Estado");
-                    MesaActualizada?.Invoke(this, EventArgs.Empty);
+                    OnMesaActualizada();
                 }
             }
         }
@@ -152,11 +152,17 @@ namespace PracticaFinalV2.Modelos
             }
 
             ActualizarEstadoComanda();
+            OnMesaActualizada();
         }
 
         protected void OnPropertyChanged(string nombrePropiedad)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nombrePropiedad));
+        }
+
+        protected void OnMesaActualizada()
+        {
+            MesaActualizada?.Invoke(this, EventArgs.Empty);
         }
     }
 }

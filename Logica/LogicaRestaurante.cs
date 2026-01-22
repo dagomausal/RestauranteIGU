@@ -14,6 +14,7 @@ namespace PracticaFinalV2.Logica
         public ObservableCollection<Mesa> ListaMesas { get; set; }
         public ObservableCollection<Plato> MenuDelDia { get; set; }
         public event EventHandler<MesaEventArgs> MesaAnadida;
+        public event EventHandler<MesaEventArgs> MesaEliminada;
         public event EventHandler<MesaEventArgs> SeleccionCambiada;
 
         public LogicaRestaurante()
@@ -25,11 +26,11 @@ namespace PracticaFinalV2.Logica
         public void CargarDatosIniciales()
         {
             // --- Lista de Mesas ---
-            Mesa m1 = new Mesa(1, 4, TipoMesa.Cuadrada, 50, 50);
-            Mesa m2 = new Mesa(2, 4, TipoMesa.Cuadrada, 150, 50);
-            Mesa m3 = new Mesa(3, 4, TipoMesa.Cuadrada, 250, 50);
-            Mesa m4 = new Mesa(4, 6, TipoMesa.Circular, 50, 250);
-            Mesa m5 = new Mesa(5, 6, TipoMesa.Circular, 250, 250);
+            Mesa m1 = new Mesa(1, 4, TipoMesa.Rectangular, 150, 50);
+            Mesa m2 = new Mesa(2, 4, TipoMesa.Rectangular, 300, 50);
+            Mesa m3 = new Mesa(3, 4, TipoMesa.Rectangular, 450, 50);
+            Mesa m4 = new Mesa(4, 6, TipoMesa.Circular, 200, 250);
+            Mesa m5 = new Mesa(5, 6, TipoMesa.Circular, 350, 250);
 
             // --- Lista de Platos ---
             MenuDelDia.Add(new Plato("Ensalada Mixta", CategoriaPlato.Primero, "Lechuga, tomate, cebolla y atún"));
@@ -87,9 +88,26 @@ namespace PracticaFinalV2.Logica
             OnMesaAnadida(nuevaMesa);
         }
 
+        public Mesa CrearMesa(int id, int capaciadadMaxima, TipoMesa forma)
+        {
+            if (forma == TipoMesa.Circular) return new Mesa(id, capaciadadMaxima, forma, 10, 45);
+            else return new Mesa(id, capaciadadMaxima, forma, 30, 30);
+        }
+
+        public void EliminarMesa(Mesa mesaAEliminar)
+        {
+            ListaMesas.Remove(mesaAEliminar);
+            OnMesaEliminada(mesaAEliminar);
+        }
+
         private void OnMesaAnadida(Mesa mesa)
         {
             MesaAnadida?.Invoke(this, new MesaEventArgs(mesa));
+        }
+
+        private void OnMesaEliminada(Mesa mesa)
+        {
+            MesaEliminada?.Invoke(this, new MesaEventArgs(mesa));
         }
 
         public void SeleccionarMesa(Mesa mesa)
@@ -103,6 +121,58 @@ namespace PracticaFinalV2.Logica
         private void OnSeleccionCambiada(Mesa mesa)
         {
             SeleccionCambiada?.Invoke(this, new MesaEventArgs(mesa));
+        }
+
+        public int CalcularTotalPlatos(Mesa mesa)
+        {
+            int total = 0;
+
+            foreach(PlatoComanda pc in mesa.Comanda)
+            {
+                total += pc.Cantidad;
+            }
+
+            return total;
+        }
+
+        public int CalcularTotalPlatosCategoria(Mesa mesa, CategoriaPlato categoria)
+        {
+            int total = 0;
+
+            foreach (PlatoComanda pc in mesa.Comanda)
+            {
+                if (pc.PlatoPedido.Categoria == categoria)
+                {
+                    total += pc.Cantidad;
+                }
+            }
+
+            return total;
+        }
+
+        public int ObtenerSiguienteIdDisponible(ObservableCollection<Mesa> listaBuscar)
+        {
+            int id = 1;
+            
+            while (true)
+            {
+                bool idOcupado = false;
+                foreach (Mesa m in listaBuscar)
+                {
+                    if (m.Id == id)
+                    {
+                        idOcupado = true;
+                        break;
+                    }
+                }
+
+                if (idOcupado == false)
+                {
+                    return id;
+                }
+
+                id++;
+            }
         }
     }
 
