@@ -16,8 +16,8 @@ namespace PracticaFinalV2.Modelos
         private int comensalesRespaldo;
         private EstadoMesa estadoRespaldo;
 
-        public event EventHandler MesaActualizada;
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public event EventHandler ComandaActualizada;
         public int Id { get; set; }
         public int CapacidadMaxima { get; set; }
         public int ComensalesActuales 
@@ -28,8 +28,7 @@ namespace PracticaFinalV2.Modelos
                 if (ComensalesActuales != value)
                 {
                     comensalesRespaldo = value;
-                    OnPropertyChanged("ComensalesActuales");
-                    OnMesaActualizada();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -41,8 +40,7 @@ namespace PracticaFinalV2.Modelos
                 if(estadoRespaldo != value)
                 {
                     estadoRespaldo = value;
-                    OnPropertyChanged("Estado");
-                    OnMesaActualizada();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -64,6 +62,7 @@ namespace PracticaFinalV2.Modelos
             }
         }
         public ObservableCollection<PlatoComanda> Comanda { get; set; }
+        public List<Plato> HistoricoComandas { get; set; }
 
         public Mesa(int id, int capacidadMaxima, TipoMesa forma, double x, double y)
         {
@@ -76,6 +75,7 @@ namespace PracticaFinalV2.Modelos
             Y = y;
 
             Comanda = new ObservableCollection<PlatoComanda>();
+            HistoricoComandas = new List<Plato>();
         }
 
         public void Reservar(int comensales)
@@ -96,6 +96,11 @@ namespace PracticaFinalV2.Modelos
 
         public void Liberar()
         {
+            foreach(PlatoComanda pc in Comanda)
+            {
+                for (int i = 0; i < pc.Cantidad; i++) HistoricoComandas.Add(pc.PlatoPedido);
+            }
+
             Comanda.Clear();
             ComensalesActuales = 0;
             Estado = EstadoMesa.Libre;
@@ -152,17 +157,16 @@ namespace PracticaFinalV2.Modelos
             }
 
             ActualizarEstadoComanda();
-            OnMesaActualizada();
+            OnComandaActualizada();
         }
 
-        protected void OnPropertyChanged(string nombrePropiedad)
+        protected void OnPropertyChanged()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nombrePropiedad));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));
         }
-
-        protected void OnMesaActualizada()
+        protected void OnComandaActualizada()
         {
-            MesaActualizada?.Invoke(this, EventArgs.Empty);
+            ComandaActualizada?.Invoke(this, EventArgs.Empty);
         }
     }
 }

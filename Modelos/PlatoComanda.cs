@@ -11,7 +11,7 @@ namespace PracticaFinalV2.Modelos
     {
         private int cantidadRespaldo;
         public Plato PlatoPedido { get; set; }
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         public int Cantidad
         {
             get { return cantidadRespaldo; }

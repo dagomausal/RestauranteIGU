@@ -2,16 +2,16 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
-    <Compile Update="Ventanas\DetallesSala.xaml.cs">
+    <Compile Update="Vistas\DetallesSala.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Ventanas\GestionMesas.xaml.cs">
+    <Compile Update="Vistas\GestionMesas.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Ventanas\GestionPlatos.xaml.cs">
+    <Compile Update="Vistas\GestionPlatos.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Ventanas\VentanaComanda.xaml.cs">
+    <Compile Update="Vistas\VentanaComanda.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

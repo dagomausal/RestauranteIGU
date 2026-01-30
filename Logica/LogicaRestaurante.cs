@@ -21,6 +21,7 @@ namespace PracticaFinalV2.Logica
         {
             ListaMesas = new ObservableCollection<Mesa>();
             MenuDelDia = new ObservableCollection<Plato>();
+            MesaSeleccionada = null;
         }
 
         public void CargarDatosIniciales()
@@ -110,6 +111,11 @@ namespace PracticaFinalV2.Logica
                 total += pc.Cantidad;
             }
 
+            foreach (Plato p in mesa.HistoricoComandas)
+            {
+                total++;
+            }
+
             return total;
         }
 
@@ -166,6 +172,42 @@ namespace PracticaFinalV2.Logica
         public void EliminarPlato(Plato platoAEliminar)
         {
             MenuDelDia.Remove(platoAEliminar);
+        }
+
+        public void ProcesarMesas(IEnumerable<Mesa> listaAnadir, IEnumerable<Mesa> listaBorrar)
+        {
+            foreach (Mesa m in listaBorrar)
+            {
+                if (this.ListaMesas.Contains(m))
+                {
+                    EliminarMesa(m);
+                }
+            }
+
+            foreach (Mesa m in listaAnadir)
+            {
+                if (!ListaMesas.Contains(m)) {
+                    AgregarMesa(m);
+                }
+            }
+        }
+
+        public void ProcesarPlatos(IEnumerable<Plato> listaAnadir, IEnumerable<Plato> listaBorrar)
+        {
+            foreach (Plato p in listaBorrar)
+            {
+                if (this.MenuDelDia.Contains(p))
+                {
+                    EliminarPlato(p);
+                }
+            }
+            foreach (Plato p in listaAnadir)
+            {
+                if (!MenuDelDia.Contains(p))
+                {
+                    AnadirPlato(p);
+                }
+            }
         }
 
         private void OnMesaAnadida(Mesa mesa)

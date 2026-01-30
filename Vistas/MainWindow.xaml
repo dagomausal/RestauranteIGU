@@ -1,0 +1,103 @@
+﻿<Window x:Class="PracticaFinalV2.Vistas.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PracticaFinalV2.Vistas"
+        mc:Ignorable="d"
+        Title="Restaurante IGU" Height="550" Width="800">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Archivo">
+                <MenuItem Header="Nueva Sesión (Reiniciar)"/>
+                <MenuItem Header="Gestionar Carta" Click="GestionarPlatos_Click"/>
+                <MenuItem Header="Salir" />
+            </MenuItem>
+
+            <MenuItem Header="Mesa">
+                <MenuItem Header="Gestionar Mesas" Click="GestionarMesas_Click"/>
+                <MenuItem Header="Detalles de Sala" Click="DetallesSala_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <TabControl x:Name="tabsPrincipal" Margin="5" SelectionChanged="TabControl_SelectionChanged">
+
+            <TabItem Header="Sala">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="200"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="5">
+                            <Canvas x:Name="lienzoSala" Background="White">
+                                <Rectangle x:Name="HuecoMesas" Fill="LightGray" Width="126" Height="116" Canvas.Left="7" Canvas.Top="27" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                                <TextBlock Text="MESAS NUEVAS" Canvas.Left="25" Canvas.Top="9" FontWeight="Bold" HorizontalAlignment="Center" Height="21"/>
+                            </Canvas>
+                        </Border>
+
+                        <StackPanel Grid.Column="1" Margin="10">
+
+                            <GroupBox Header="Gestión de Mesa">
+                                <StackPanel Margin="5">
+
+                                    <TextBlock Text="Mesa Seleccionada:" FontWeight="Bold" Margin="0,5,0,0"/>
+                                    <TextBlock x:Name="txtInfoMesa" Text="-" FontSize="14" Foreground="Blue" Margin="0,0,0,10"/>
+
+                                    <TextBlock Text="Nº Comensales:" Margin="0,5,0,0"/>
+                                    <TextBox x:Name="txtComensales" Text="0" Margin="0,0,0,10"/>
+
+                                    <Button x:Name="btnReservar" Content="Reservar" Margin="0,5" Background="Yellow" Click="btnReservar_Click"/>
+                                    <Button x:Name="btnOcupar" Content="Ocupar" Margin="0,5" Background="Orange" Click="btnOcupar_Click"/>
+                                    <Button x:Name="btnLiberar" Content="Liberar"  Margin="0,5" Background="LimeGreen" Click="btnLiberar_Click"/>
+
+                                    <Separator Margin="0,10"/>
+
+                                    <TextBlock Text="Pedidos:" FontWeight="Bold" Margin="0,0,0,5"/>
+                                    <Button x:Name="btnGestionarComanda" Content="Gestionar Comanda" Height="40" Margin="0,5" Click="btnGestionarComanda_Click"/>
+                                </StackPanel>
+                            </GroupBox>
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Height="30" Margin="5">
+                        <Border Background="LimeGreen" Width="Auto" Margin="2">
+                            <TextBlock Text="Libre" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+
+                        <Border Background="Yellow" Width="Auto" Margin="2">
+                            <TextBlock Text="Reservado" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+
+                        <Border Background="Orange" Width="Auto" Margin="2">
+                            <TextBlock Text="Ocupado" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+
+                        <Border Background="Red" Width="Auto" Margin="2">
+                            <TextBlock Text="Con Comanda" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem x:Name="tabGlobal" Header="Estadística Global">
+                <Border Margin="10" BorderBrush="Black" BorderThickness="1">
+                    <Canvas x:Name="lienzoGlobal" SizeChanged="LienzoGlobal_SizeChanged"/>
+                </Border>
+            </TabItem>
+
+            <TabItem x:Name="tabMesa" Header="Estadística Mesa">
+                <Border Margin="10" BorderBrush="Black" BorderThickness="1">
+                    <Canvas x:Name="lienzoMesa"/>
+                </Border>
+            </TabItem>
+
+        </TabControl>
+    </DockPanel>
+</Window>
