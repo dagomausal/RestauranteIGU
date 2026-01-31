@@ -32,6 +32,8 @@ namespace PracticaFinalV2.Vistas
             lvMesas.ItemsSource = ListaMesasTemporal;
         }
 
+
+        // --- EVENTOS INTERFAZ ---
         private void btnCrear_Click(object sender, RoutedEventArgs e)
         {
             if (!int.TryParse(txtCapacidad.Text, out int comensales))
@@ -52,7 +54,6 @@ namespace PracticaFinalV2.Vistas
             int idObtenido = Logica.ObtenerSiguienteIdDisponible(ListaMesasTemporal);
             ListaMesasTemporal.Add(Logica.CrearMesa(idObtenido, comensales, forma));
         }
-
         private void btnEliminar_Click(object sender, RoutedEventArgs e)
         {
             if (lvMesas.SelectedItem != null)
@@ -77,7 +78,6 @@ namespace PracticaFinalV2.Vistas
                 MessageBox.Show("Selecciona una mesa de la lista para eliminar.", "Error de Selección", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;

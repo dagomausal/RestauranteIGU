@@ -25,6 +25,9 @@ namespace PracticaFinalV2.Vistas
 
             lvComandaActual.ItemsSource = ComandaTemporal;
         }
+
+
+        // --- EVENTOS INTERFAZ ---
         private void btnAnadir_Click(object sender, RoutedEventArgs e)
         {
             if (cbMenu.SelectedItem != null)
@@ -64,9 +67,7 @@ namespace PracticaFinalV2.Vistas
         }
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
-            mesaActual.ConfirmarComanda(ComandaTemporal);
-
-            this.Close();
+            this.DialogResult = true;
         }
     }
 }

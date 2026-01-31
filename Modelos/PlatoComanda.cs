@@ -31,7 +31,7 @@ namespace PracticaFinalV2.Modelos
             Cantidad = 1;
         }
 
-        // Constructor de copia
+        // --- CONSTRUCTOR PARA HACER COPIA ---
         public PlatoComanda(PlatoComanda original)
         {
             this.PlatoPedido = original.PlatoPedido;
@@ -39,6 +39,7 @@ namespace PracticaFinalV2.Modelos
         }
 
 
+        // --- EVENTO OnXxX ---
         protected void OnPropertyChanged(string nombrePropiedad)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nombrePropiedad));

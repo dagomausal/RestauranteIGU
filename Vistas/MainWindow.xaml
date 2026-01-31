@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PracticaFinalV2.Vistas"
         mc:Ignorable="d"
-        Title="Restaurante IGU" Height="550" Width="800">
+        Title="Restaurante IGU" Height="550" Width="800" Icon="/Iconos/LogoMain.png">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Archivo">
-                <MenuItem Header="Nueva Sesión (Reiniciar)"/>
+                <MenuItem Header="Nueva Sesión (Reiniciar)" Click="NuevaSesion_Click"/>
                 <MenuItem Header="Gestionar Carta" Click="GestionarPlatos_Click"/>
-                <MenuItem Header="Salir" />
+                <MenuItem Header="Salir" Click="Salir_Click"/>
             </MenuItem>
 
             <MenuItem Header="Mesa">
@@ -36,7 +36,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="5">
-                            <Canvas x:Name="lienzoSala" Background="White">
+                            <Canvas x:Name="lienzoSala" Background="White" SizeChanged="LienzoSala_SizeChanged">
                                 <Rectangle x:Name="HuecoMesas" Fill="LightGray" Width="126" Height="116" Canvas.Left="7" Canvas.Top="27" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                                 <TextBlock Text="MESAS NUEVAS" Canvas.Left="25" Canvas.Top="9" FontWeight="Bold" HorizontalAlignment="Center" Height="21"/>
                             </Canvas>
@@ -44,23 +44,23 @@
 
                         <StackPanel Grid.Column="1" Margin="10">
 
-                            <GroupBox Header="Gestión de Mesa">
+                            <GroupBox Header="Gestión de Mesa" Background="White">
                                 <StackPanel Margin="5">
 
                                     <TextBlock Text="Mesa Seleccionada:" FontWeight="Bold" Margin="0,5,0,0"/>
                                     <TextBlock x:Name="txtInfoMesa" Text="-" FontSize="14" Foreground="Blue" Margin="0,0,0,10"/>
 
                                     <TextBlock Text="Nº Comensales:" Margin="0,5,0,0"/>
-                                    <TextBox x:Name="txtComensales" Text="0" Margin="0,0,0,10"/>
+                                    <TextBox x:Name="txtComensales" IsEnabled="False" Text="-" Margin="0,0,0,10" KeyDown="Enter_KeyDown"/>
 
-                                    <Button x:Name="btnReservar" Content="Reservar" Margin="0,5" Background="Yellow" Click="btnReservar_Click"/>
-                                    <Button x:Name="btnOcupar" Content="Ocupar" Margin="0,5" Background="Orange" Click="btnOcupar_Click"/>
-                                    <Button x:Name="btnLiberar" Content="Liberar"  Margin="0,5" Background="LimeGreen" Click="btnLiberar_Click"/>
+                                    <Button x:Name="btnReservar" IsEnabled="False" Content="Reservar" Margin="0,5" Background="Yellow" Click="btnReservar_Click"/>
+                                    <Button x:Name="btnOcupar" IsEnabled="False" Content="Ocupar" Margin="0,5" Background="Orange" Click="btnOcupar_Click"/>
+                                    <Button x:Name="btnLiberar" IsEnabled="False" Content="Liberar"  Margin="0,5" Background="LimeGreen" Click="btnLiberar_Click"/>
 
                                     <Separator Margin="0,10"/>
 
                                     <TextBlock Text="Pedidos:" FontWeight="Bold" Margin="0,0,0,5"/>
-                                    <Button x:Name="btnGestionarComanda" Content="Gestionar Comanda" Height="40" Margin="0,5" Click="btnGestionarComanda_Click"/>
+                                    <Button x:Name="btnGestionarComanda" IsEnabled="False" Content="Gestionar Comanda" Height="40" Margin="0,5" Click="btnGestionarComanda_Click"/>
                                 </StackPanel>
                             </GroupBox>
                         </StackPanel>
@@ -94,7 +94,18 @@
 
             <TabItem x:Name="tabMesa" Header="Estadística Mesa">
                 <Border Margin="10" BorderBrush="Black" BorderThickness="1">
-                    <Canvas x:Name="lienzoMesa"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="180"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Canvas x:Name="lienzoMesa" Grid.Column="0" SizeChanged="LienzoMesa_SizeChanged"/>
+
+                        <Border Grid.Column="1" BorderBrush="Black" BorderThickness="1, 0, 0, 0" HorizontalAlignment="Left"/>
+
+                        <StackPanel x:Name="panelLeyenda" Grid.Column="1"/>
+                    </Grid>
                 </Border>
             </TabItem>
 

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PracticaFinalV2.Vistas"
         mc:Ignorable="d"
-        Title="Gestión de la Comanda" Height="400" Width="600">
+        Title="Gestión de la Comanda" Height="400" Width="600" Icon="/Iconos/LogoComanda.png">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

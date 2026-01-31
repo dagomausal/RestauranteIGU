@@ -17,7 +17,6 @@ using PracticaFinalV2.Servicios;
 
 namespace PracticaFinalV2.Vistas
 {
-
     public partial class DetallesMesas : Window
     {
         private LogicaRestaurante Logica;
@@ -29,21 +28,26 @@ namespace PracticaFinalV2.Vistas
             lvMesas.ItemsSource = Logica.ListaMesas;
             Logica.SeleccionCambiada += Logica_SeleccionCambiada;
             this.Closed += OnClosed;
-
-            // --- Seleccionar la primera mesa al abrir la ventana ---
-            if (Logica.MesaSeleccionada != null)
-            {
-                lvMesas.SelectedItem = Logica.MesaSeleccionada;
-                CargarComanda(Logica.MesaSeleccionada);
-            }
         }
 
+
+        // --- METODOS ---
+        private void CargarComanda(Mesa mesa)
+        {
+            if (mesa != null) lvComanda.ItemsSource = mesa.Comanda;
+            else lvComanda.ItemsSource = null;
+        }
+
+
+        // --- EVENTOS COMUNICACIÓN ---
         private void Logica_SeleccionCambiada(object sender, MesaEventArgs e)
         {
             lvMesas.SelectedItem = e.MesaNueva;
             CargarComanda(e.MesaNueva);
         }
 
+
+        // --- EVENTOS INTERFAZ ---
         private void lvMesas_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (lvMesas.SelectedItem != null)
@@ -53,13 +57,6 @@ namespace PracticaFinalV2.Vistas
                 CargarComanda(mesaSeleccionada);
             }
         }
-
-        private void CargarComanda(Mesa mesa)
-        {
-            if (mesa != null) lvComanda.ItemsSource = mesa.Comanda;
-            else lvComanda.ItemsSource = null;
-        }
-
         private void lvMesas_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (lvMesas.SelectedItem!= null)
@@ -80,6 +77,9 @@ namespace PracticaFinalV2.Vistas
                 }
             }
         }
+
+
+        // --- EVENTOS OnXxX ---
         private void OnClosed(object sender, EventArgs e)
         {
             Logica.SeleccionCambiada -= Logica_SeleccionCambiada;

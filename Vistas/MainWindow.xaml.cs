@@ -19,6 +19,7 @@ namespace PracticaFinalV2.Vistas
     public partial class MainWindow : Window
     {
         private LogicaRestaurante Logica;
+        private DibujanteGraficos Dibujante;
         private Grid gridSeleccionado;
         private bool isDragging = false;
         private Point clickEnGrid;
@@ -28,8 +29,8 @@ namespace PracticaFinalV2.Vistas
         {
             InitializeComponent();
             Logica = new LogicaRestaurante();
+            Dibujante = new DibujanteGraficos();
 
-            // --- Eventos ---
             Logica.MesaAnadida += Logica_MesaAnadida;
             Logica.MesaEliminada += Logica_MesaEliminada;
             Logica.SeleccionCambiada += Logica_SeleccionCambiada;
@@ -39,6 +40,9 @@ namespace PracticaFinalV2.Vistas
             lienzoSala.MouseLeftButtonDown += LienzoSala_MouseLeftButtonDown;
         }
 
+        // --- METODOS ---
+
+        //      --- DIBUJOS MESA ---
         private void DibujarMesa(Mesa mesa)
         {
             // --- Contenedor principal ---
@@ -88,49 +92,6 @@ namespace PracticaFinalV2.Vistas
                 case EstadoMesa.OcupadaComanda: figura.Fill = Brushes.Red; break;
             }
         }
-        private void AbrirVentanaDetalles()
-        {
-            DetallesMesas ventanaDetalles = new DetallesMesas(Logica);
-
-            if (ventanaDetalles == null || !ventanaDetalles.IsLoaded) ventanaDetalles.Show();
-            else ventanaDetalles.Activate();
-        }
-
-        private void ControlVentanaComanda()
-        {
-            if (Logica.MesaSeleccionada.Estado != EstadoMesa.Libre && Logica.MesaSeleccionada.Estado != EstadoMesa.Reservada)
-            {
-                VentanaComanda ventanaComanda = new VentanaComanda(Logica.MesaSeleccionada, Logica.MenuDelDia);
-                if (ventanaComanda.ShowDialog() == true)
-                {
-                    Logica.MesaSeleccionada.ConfirmarComanda(ventanaComanda.ComandaTemporal);
-                    DibujanteGraficos.DibujarGraficoMesa(lienzoMesa, Logica.MesaSeleccionada);
-                    DibujanteGraficos.DibujarGraficoGlobal(lienzoGlobal, Logica);
-                }
-            } else
-            {
-                MessageBox.Show("Primero debes Ocupar la mesa para gestionar su comanda.", "Acción no permitida", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-        }
-
-        private void ControlVentanaGestionMesas()
-        {
-            GestionMesas ventanaGestion = new GestionMesas(Logica);
-            if (ventanaGestion.ShowDialog() == true) {
-                Logica.ProcesarMesas(ventanaGestion.ListaMesasTemporal, ventanaGestion.ListaMesasABorrar);
-            }
-        }
-
-        private void ControlVentanaGestionPlatos()
-        {
-            GestionPlatos ventanaGestion = new GestionPlatos(Logica);
-            if (ventanaGestion.ShowDialog() == true)
-            {
-                Logica.ProcesarPlatos(ventanaGestion.menuTemporal, ventanaGestion.platosABorrar);
-            }
-        }
-
         private void ActualizarPanelDerecho(Mesa mesa)
         {
             if (mesa != null)
@@ -139,6 +100,7 @@ namespace PracticaFinalV2.Vistas
                 txtComensales.Text = $"{Logica.MesaSeleccionada.ComensalesActuales}";
 
                 // --- Habilitar botones segun estado ---
+                txtComensales.IsEnabled = true;
                 btnReservar.IsEnabled = Logica.MesaSeleccionada.Estado == EstadoMesa.Libre;
                 btnOcupar.IsEnabled = Logica.MesaSeleccionada.Estado == EstadoMesa.Libre || Logica.MesaSeleccionada.Estado == EstadoMesa.Reservada;
                 btnLiberar.IsEnabled = Logica.MesaSeleccionada.Estado == EstadoMesa.Ocupada || Logica.MesaSeleccionada.Estado == EstadoMesa.OcupadaComanda || Logica.MesaSeleccionada.Estado == EstadoMesa.Reservada;
@@ -148,20 +110,101 @@ namespace PracticaFinalV2.Vistas
             else
             {
                 txtInfoMesa.Text = "-";
-                txtComensales.Text = "0";
+                txtComensales.IsEnabled = false;
+                txtComensales.Text = "-";
                 btnReservar.IsEnabled = false;
                 btnOcupar.IsEnabled = false;
                 btnLiberar.IsEnabled = false;
                 btnGestionarComanda.IsEnabled = false;
             }
         }
-
         private static String GenerarTextoMesa(Mesa mesa)
         {
             return $"Mesa {mesa.Id}\n" +
                    $"Capacidad: {mesa.CapacidadMaxima}\n" +
                    $"Comensales: {mesa.ComensalesActuales}";
         }
+        private void RecolocarMesas()
+        {
+            double anchoLienzo = lienzoSala.ActualWidth;
+            double altoLienzo = lienzoSala.ActualHeight;
+
+            foreach (Mesa mesa in Logica.ListaMesas)
+            {
+                bool movida = false;
+
+                if (mesa.X + mesa.ancho > anchoLienzo)
+                {
+                    mesa.X = anchoLienzo - mesa.ancho;
+                    if (mesa.X < 0) mesa.X = 0;
+                    movida = true;
+                }
+
+                if (mesa.Y + mesa.alto > altoLienzo)
+                {
+                    mesa.Y = altoLienzo - mesa.alto;
+                    if (mesa.Y < 0) mesa.Y = 0;
+                    movida = true;
+                }
+
+                if (movida)
+                {
+                    foreach (UIElement hijo in lienzoSala.Children)
+                    {
+                        if (hijo is Grid g && g.Tag == mesa)
+                        {
+                            Canvas.SetLeft(g, mesa.X);
+                            Canvas.SetTop(g, mesa.Y);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        //      --- VENTANAS ---
+        private void AbrirVentanaDetalles()
+        {
+            DetallesMesas ventanaDetalles = new DetallesMesas(Logica);
+
+            ventanaDetalles.Owner = this;
+
+            if (ventanaDetalles == null || !ventanaDetalles.IsLoaded) ventanaDetalles.Show();
+            else ventanaDetalles.Activate();
+        }
+        private void ControlVentanaComanda()
+        {
+            if (Logica.MesaSeleccionada.Estado != EstadoMesa.Libre && Logica.MesaSeleccionada.Estado != EstadoMesa.Reservada)
+            {
+                VentanaComanda ventanaComanda = new VentanaComanda(Logica.MesaSeleccionada, Logica.MenuDelDia);
+                if (ventanaComanda.ShowDialog() == true)
+                {
+                    Logica.MesaSeleccionada.ConfirmarComanda(ventanaComanda.ComandaTemporal);
+                    Dibujante.DibujarGraficoMesa(lienzoMesa, Logica, panelLeyenda);
+                    Dibujante.DibujarGraficoGlobal(lienzoGlobal, Logica);
+                }
+            } else
+            {
+                MessageBox.Show("Primero debes Ocupar la mesa para gestionar su comanda.", "Acción no permitida", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+        }
+        private void ControlVentanaGestionMesas()
+        {
+            GestionMesas ventanaGestion = new GestionMesas(Logica);
+            if (ventanaGestion.ShowDialog() == true) {
+                Logica.ProcesarMesas(ventanaGestion.ListaMesasTemporal, ventanaGestion.ListaMesasABorrar);
+            }
+        }
+        private void ControlVentanaGestionPlatos()
+        {
+            GestionPlatos ventanaGestion = new GestionPlatos(Logica);
+            if (ventanaGestion.ShowDialog() == true)
+            {
+                Logica.ProcesarPlatos(ventanaGestion.menuTemporal, ventanaGestion.platosABorrar);
+            }
+        }
+
         
         // --- EVENTOS COMUNICACION ---
         private void Logica_MesaAnadida(object sender, MesaEventArgs e)
@@ -213,7 +256,7 @@ namespace PracticaFinalV2.Vistas
             }
 
             ActualizarPanelDerecho(Logica.MesaSeleccionada);
-            //DibujanteGraficos.DibujarGraficoMesa(lienzoMesa, Logica.MesaSeleccionada);
+            Dibujante.DibujarGraficoMesa(lienzoMesa, Logica, panelLeyenda);
         }
         private void Logica_MesaActualizada(object sender, PropertyChangedEventArgs e)
         {
@@ -238,11 +281,14 @@ namespace PracticaFinalV2.Vistas
         }
         private void Logica_ComandaActualizada(object? sender, EventArgs e)
         {
-            DibujanteGraficos.DibujarGraficoMesa(lienzoMesa, Logica.MesaSeleccionada);
-            DibujanteGraficos.DibujarGraficoGlobal(lienzoGlobal, Logica);
+            Dibujante.DibujarGraficoMesa(lienzoMesa, Logica, panelLeyenda);
+            Dibujante.DibujarGraficoGlobal(lienzoGlobal, Logica);
         }
 
+
         // --- EVENTOS INTERFAZ ---
+
+        //      --- CLICKS ---
         private void btnReservar_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -285,6 +331,44 @@ namespace PracticaFinalV2.Vistas
         {
             ControlVentanaComanda();
         }
+        private void GestionarMesas_Click(object sender, RoutedEventArgs e)
+        {
+            ControlVentanaGestionMesas();
+        }
+        private void GestionarPlatos_Click(object sender, RoutedEventArgs e)
+        {
+            ControlVentanaGestionPlatos();
+        }
+        private void NuevaSesion_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que quieres iniciar una nueva sesión?\n" +
+                                                         "Se borrarán todas las comandas y estadísticas actuales.",
+                                                         "Confirmar Nueva Sesión",
+                                                         MessageBoxButton.YesNo,
+                                                         MessageBoxImage.Warning);
+            if (resultado == MessageBoxResult.Yes)
+            {
+                Logica.ReiniciarRestaurante();
+
+                lienzoGlobal.Children.Clear();
+                lienzoMesa.Children.Clear();
+
+                if (tabsPrincipal != null)
+                {
+                    tabsPrincipal.SelectedIndex = 0;
+                }
+            }
+        }
+        private void Salir_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+        private void DetallesSala_Click(object sender, RoutedEventArgs e)
+        {
+            AbrirVentanaDetalles();
+        }
+
+        //      --- RATON Y DEMÁS ---
         private void Mesa_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             gridArrastrado = (Grid)sender;
@@ -352,28 +436,46 @@ namespace PracticaFinalV2.Vistas
             TabControl tab = (TabControl)sender;
             TabItem item = (TabItem)tab.SelectedItem;
 
-            if (item == tabGlobal) DibujanteGraficos.DibujarGraficoGlobal(lienzoGlobal, Logica);
-            else if (item == tabMesa) DibujanteGraficos.DibujarGraficoMesa(lienzoMesa, Logica.MesaSeleccionada);
-        }
-        private void DetallesSala_Click(object sender, RoutedEventArgs e)
-        {
-            AbrirVentanaDetalles();
+            if (item == tabGlobal) Dibujante.DibujarGraficoGlobal(lienzoGlobal, Logica);
+            else if (item == tabMesa) Dibujante.DibujarGraficoMesa(lienzoMesa, Logica, panelLeyenda);
         }
         private void LienzoGlobal_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            DibujanteGraficos.DibujarGraficoGlobal(lienzoGlobal, Logica);
+            Dibujante.DibujarGraficoGlobal(lienzoGlobal, Logica);
         }
         private void LienzoMesa_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            DibujanteGraficos.DibujarGraficoMesa(lienzoMesa, Logica.MesaSeleccionada);
+            Dibujante.DibujarGraficoMesa(lienzoMesa, Logica, panelLeyenda);
         }
-        private void GestionarMesas_Click(object sender, RoutedEventArgs e)
+        private void LienzoSala_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            ControlVentanaGestionMesas();
+            RecolocarMesas();
         }
-        private void GestionarPlatos_Click(object sender, RoutedEventArgs e)
+        private void Enter_KeyDown(object sender, KeyEventArgs e)
         {
-            ControlVentanaGestionPlatos();
+            if (e.Key == Key.Enter)
+            {
+                if (!int.TryParse(txtComensales.Text, out int comensales))
+                {
+                    MessageBox.Show("No se ha introducido un numero de comensales.", "Error de Datos", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (comensales != Logica.MesaSeleccionada.ComensalesActuales)
+                {
+                    try
+                    {
+                        Logica.MesaSeleccionada.CambiarComensales(comensales);
+                        Keyboard.ClearFocus();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error de Datos", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+
+            }
         }
+
     }
 }

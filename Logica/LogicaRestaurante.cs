@@ -23,7 +23,6 @@ namespace PracticaFinalV2.Logica
             MenuDelDia = new ObservableCollection<Plato>();
             MesaSeleccionada = null;
         }
-
         public void CargarDatosIniciales()
         {
             // --- Lista de Mesas ---
@@ -82,58 +81,44 @@ namespace PracticaFinalV2.Logica
             m5.AgregarPlatoComanda(MenuDelDia[6]);
             AgregarMesa(m5);
         }
+        public void ReiniciarRestaurante()
+        {
+            foreach (Mesa mesa in ListaMesas)
+            {
+                mesa.HistoricoComandas.Clear();
+                mesa.Comanda.Clear();
+                mesa.ComensalesActuales = 0;
+                mesa.Estado = EstadoMesa.Libre;
+            }
 
+            SeleccionarMesa(null);
+        }
+
+
+        // --- METODOS MESA ---
+        public void SeleccionarMesa(Mesa mesa)
+        {
+            if (MesaSeleccionada != mesa)
+            {
+                MesaSeleccionada = mesa;
+                OnSeleccionCambiada(mesa);
+            }
+        }
         public void AgregarMesa(Mesa nuevaMesa)
         {
             ListaMesas.Add(nuevaMesa);
             OnMesaAnadida(nuevaMesa);
         }
-
         public Mesa CrearMesa(int id, int capaciadadMaxima, TipoMesa forma)
         {
             if (forma == TipoMesa.Circular) return new Mesa(id, capaciadadMaxima, forma, 10, 45);
             else return new Mesa(id, capaciadadMaxima, forma, 30, 30);
         }
-
         public void EliminarMesa(Mesa mesaAEliminar)
         {
             ListaMesas.Remove(mesaAEliminar);
             OnMesaEliminada(mesaAEliminar);
         }
-
-
-        public int CalcularTotalPlatos(Mesa mesa)
-        {
-            int total = 0;
-
-            foreach (PlatoComanda pc in mesa.Comanda)
-            {
-                total += pc.Cantidad;
-            }
-
-            foreach (Plato p in mesa.HistoricoComandas)
-            {
-                total++;
-            }
-
-            return total;
-        }
-
-        public int CalcularTotalPlatosCategoria(Mesa mesa, CategoriaPlato categoria)
-        {
-            int total = 0;
-
-            foreach (PlatoComanda pc in mesa.Comanda)
-            {
-                if (pc.PlatoPedido.Categoria == categoria)
-                {
-                    total += pc.Cantidad;
-                }
-            }
-
-            return total;
-        }
-
         public int ObtenerSiguienteIdDisponible(ObservableCollection<Mesa> listaBuscar)
         {
             int id = 1;
@@ -158,22 +143,6 @@ namespace PracticaFinalV2.Logica
                 id++;
             }
         }
-
-        public void AnadirPlato(Plato nuevoPlato)
-        {
-            MenuDelDia.Add(nuevoPlato);
-        }
-
-        public Plato CrearPlato(string nombre, CategoriaPlato categoria, string descripcion)
-        {
-            return new Plato(nombre, categoria, descripcion);
-        }
-
-        public void EliminarPlato(Plato platoAEliminar)
-        {
-            MenuDelDia.Remove(platoAEliminar);
-        }
-
         public void ProcesarMesas(IEnumerable<Mesa> listaAnadir, IEnumerable<Mesa> listaBorrar)
         {
             foreach (Mesa m in listaBorrar)
@@ -186,12 +155,88 @@ namespace PracticaFinalV2.Logica
 
             foreach (Mesa m in listaAnadir)
             {
-                if (!ListaMesas.Contains(m)) {
+                if (!ListaMesas.Contains(m))
+                {
                     AgregarMesa(m);
                 }
             }
         }
 
+
+        // --- METODOS PLATOS ---
+        public int CalcularTotalPlatos(Mesa mesa)
+        {
+            int total = 0;
+
+            foreach (PlatoComanda pc in mesa.Comanda)
+            {
+                total += pc.Cantidad;
+            }
+
+            foreach (PlatoComanda pc in mesa.HistoricoComandas)
+            {
+                total += pc.Cantidad;
+            }
+
+            return total;
+        }
+        public List<PlatoComanda> ObtenerPlatoCategoria(Mesa mesa, CategoriaPlato categoria)
+        {
+            List<PlatoComanda> listaPlatos = new List<PlatoComanda>();
+
+            foreach(PlatoComanda pc in mesa.HistoricoComandas)
+            {
+                if (pc.PlatoPedido.Categoria == categoria)
+                {
+                    PlatoComanda copia = new PlatoComanda(pc.PlatoPedido);
+                    copia.Cantidad = pc.Cantidad;
+
+                    listaPlatos.Add(copia);
+                }
+            }
+
+            foreach(PlatoComanda pc in mesa.Comanda)
+            {
+                if (pc.PlatoPedido.Categoria == categoria)
+                {
+                    PlatoComanda pcEncontrado = null;
+
+                    foreach(PlatoComanda pcLista in listaPlatos)
+                    {
+                        if (pcLista.PlatoPedido == pc.PlatoPedido)
+                        {
+                            pcEncontrado = pcLista;
+                            break;
+                        }
+                    }
+
+                    if (pcEncontrado != null)
+                    {
+                        pcEncontrado.Cantidad += pc.Cantidad;
+                    } else
+                    {
+                        PlatoComanda copia = new PlatoComanda(pc.PlatoPedido);
+                        copia.Cantidad = pc.Cantidad;
+
+                        listaPlatos.Add(copia);
+                    }
+                }
+            }
+
+            return listaPlatos;
+        }
+        public void AnadirPlato(Plato nuevoPlato)
+        {
+            MenuDelDia.Add(nuevoPlato);
+        }
+        public Plato CrearPlato(string nombre, CategoriaPlato categoria, string descripcion)
+        {
+            return new Plato(nombre, categoria, descripcion);
+        }
+        public void EliminarPlato(Plato platoAEliminar)
+        {
+            MenuDelDia.Remove(platoAEliminar);
+        }
         public void ProcesarPlatos(IEnumerable<Plato> listaAnadir, IEnumerable<Plato> listaBorrar)
         {
             foreach (Plato p in listaBorrar)
@@ -210,31 +255,24 @@ namespace PracticaFinalV2.Logica
             }
         }
 
-        private void OnMesaAnadida(Mesa mesa)
-        {
-            MesaAnadida?.Invoke(this, new MesaEventArgs(mesa));
-        }
 
-        private void OnMesaEliminada(Mesa mesa)
-        {
-            MesaEliminada?.Invoke(this, new MesaEventArgs(mesa));
-        }
-
-        public void SeleccionarMesa(Mesa mesa)
-        {
-            if (MesaSeleccionada != mesa)
-            {
-                MesaSeleccionada = mesa;
-                OnSeleccionCambiada(mesa);
-            }
-        }
+        // --- Eventos OnXxX ---
         private void OnSeleccionCambiada(Mesa mesa)
         {
             SeleccionCambiada?.Invoke(this, new MesaEventArgs(mesa));
         }
+        private void OnMesaAnadida(Mesa mesa)
+        {
+            MesaAnadida?.Invoke(this, new MesaEventArgs(mesa));
+        }
+        private void OnMesaEliminada(Mesa mesa)
+        {
+            MesaEliminada?.Invoke(this, new MesaEventArgs(mesa));
+        }
     }
 
-    // --- Para pasar los datos como segundo Argumento ---
+
+    // --- Para pasar la mesa como segundo argumento ---
     public class MesaEventArgs : EventArgs
     {
         public Mesa MesaNueva { get; set; }

@@ -34,6 +34,8 @@ namespace PracticaFinalV2.Vistas
             lvCarta.ItemsSource = menuTemporal;
         }
 
+
+        // --- EVENTOS INTERFAZ ---
         private void btnCrear_Click(object sender, RoutedEventArgs e)
         {
             string nombre = txtNombre.Text;
@@ -51,7 +53,6 @@ namespace PracticaFinalV2.Vistas
 
             menuTemporal.Add(Logica.CrearPlato(nombre, categoria, descripcion));
         }
-
         private void btnEliminar_Click(object sender, RoutedEventArgs e)
         {
             if (lvCarta.SelectedItem != null)
@@ -69,7 +70,6 @@ namespace PracticaFinalV2.Vistas
                 MessageBox.Show("Seleccione un plato de la lista para eliminarlo.", "Error de Selección", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;

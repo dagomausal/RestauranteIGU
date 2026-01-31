@@ -8,4 +8,18 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Iconos\LogoComanda.png" />
+    <None Remove="Iconos\LogoGestionMesas.png" />
+    <None Remove="Iconos\LogoGestionPlatos.png" />
+    <None Remove="Iconos\LogoMain.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Iconos\LogoComanda.png" />
+    <Resource Include="Iconos\LogoGestionMesas.png" />
+    <Resource Include="Iconos\LogoGestionPlatos.png" />
+    <Resource Include="Iconos\LogoMain.png" />
+  </ItemGroup>
+
 </Project>

@@ -62,7 +62,7 @@ namespace PracticaFinalV2.Modelos
             }
         }
         public ObservableCollection<PlatoComanda> Comanda { get; set; }
-        public List<Plato> HistoricoComandas { get; set; }
+        public List<PlatoComanda> HistoricoComandas { get; set; }
 
         public Mesa(int id, int capacidadMaxima, TipoMesa forma, double x, double y)
         {
@@ -75,9 +75,11 @@ namespace PracticaFinalV2.Modelos
             Y = y;
 
             Comanda = new ObservableCollection<PlatoComanda>();
-            HistoricoComandas = new List<Plato>();
+            HistoricoComandas = new List<PlatoComanda>();
         }
 
+
+        // --- METODOS ---
         public void Reservar(int comensales)
         {
             if (comensales > CapacidadMaxima) throw new Exception("El número de comensales excede la capacidad máxima de la mesa.");
@@ -85,7 +87,6 @@ namespace PracticaFinalV2.Modelos
             ComensalesActuales = comensales;
             Estado = EstadoMesa.Reservada;
         }
-
         public void Ocupar(int comensales)
         {
             if (comensales > CapacidadMaxima) throw new Exception("El número de comensales excede la capacidad máxima de la mesa.");
@@ -93,19 +94,20 @@ namespace PracticaFinalV2.Modelos
             ComensalesActuales = comensales;
             Estado = EstadoMesa.Ocupada;
         }
-
         public void Liberar()
         {
-            foreach(PlatoComanda pc in Comanda)
-            {
-                for (int i = 0; i < pc.Cantidad; i++) HistoricoComandas.Add(pc.PlatoPedido);
-            }
-
+            AgregarPlatosHistorial();
             Comanda.Clear();
             ComensalesActuales = 0;
             Estado = EstadoMesa.Libre;
         }
-
+        public void CambiarComensales(int comensales)
+        {
+            if (Estado == EstadoMesa.Libre) throw new Exception("No se puede añadir comensales a una mesa libre.");
+            if (comensales > CapacidadMaxima) throw new Exception("El número de comensales excede la capacidad máxima de la mesa.");
+            if (comensales <= 0) throw new Exception("El número de comensales debe ser mayor que cero.");
+            ComensalesActuales = comensales;
+        }
         private void ActualizarEstadoComanda()
         {
             if (this.Comanda.Count > 0)
@@ -123,10 +125,20 @@ namespace PracticaFinalV2.Modelos
                 }
             }
         }
+        public void ConfirmarComanda(ObservableCollection<PlatoComanda> comandaConfirmada)
+        {
+            this.Comanda.Clear();
 
+            foreach (PlatoComanda pc in comandaConfirmada)
+            {
+                this.Comanda.Add(pc);
+            }
+
+            ActualizarEstadoComanda();
+            OnComandaActualizada();
+        }
         public void AgregarPlatoComanda(Plato plato)
         {
-            
             PlatoComanda platoComanda = null;
             foreach(PlatoComanda pc in Comanda)
             {
@@ -146,20 +158,37 @@ namespace PracticaFinalV2.Modelos
 
             ActualizarEstadoComanda();
         }
-
-        public void ConfirmarComanda(ObservableCollection<PlatoComanda> comandaConfirmada)
+        public void AgregarPlatosHistorial()
         {
-            this.Comanda.Clear();
-
-            foreach (PlatoComanda pc in comandaConfirmada)
+            foreach (PlatoComanda pcActual in Comanda)
             {
-                this.Comanda.Add(pc);
-            }
+                PlatoComanda platoEncontrado = null;
 
-            ActualizarEstadoComanda();
-            OnComandaActualizada();
+                foreach (PlatoComanda h in HistoricoComandas)
+                {
+                    if (h.PlatoPedido == pcActual.PlatoPedido)
+                    {
+                        platoEncontrado = h;
+                        break;
+                    }
+                }
+
+                if (platoEncontrado != null)
+                {
+                    platoEncontrado.Cantidad += pcActual.Cantidad;
+                }
+                else
+                {
+                    PlatoComanda pcNuevo = new PlatoComanda(pcActual.PlatoPedido);
+                    pcNuevo.Cantidad = pcActual.Cantidad;
+
+                    HistoricoComandas.Add(pcNuevo);
+                }
+            }
         }
 
+
+        // --- EVENTOS OnXxX ---
         protected void OnPropertyChanged()
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));
